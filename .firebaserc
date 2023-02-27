@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "leasemagnets---dummy-db"
+  },
+  "targets": {
+    "leasemagnets---dummy-db": {
+      "hosting": {
+        "videomagnet": [
+          "leasemagnets---dummy-db"
+        ]
+      }
+    }
+  }
+}

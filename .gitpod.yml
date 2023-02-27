@@ -1,0 +1,12 @@
+tasks:
+  - name: Terminal 1 TYG
+    init: npm install
+    command: npm start 
+# Ports to expose on workspace startup
+ports:
+  - port: 3000
+    onOpen: open-preview
+    visibility: public
+vscode:
+  extensions:
+    - wscats.omi-snippets

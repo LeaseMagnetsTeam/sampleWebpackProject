@@ -1,0 +1,11 @@
+.reset-all {
+  /* Unintuitively, shadow DOM still allows inheritance from the host...
+     Fortunately, all: initial will stop that, *including* for !important styles
+     https://developers.google.com/web/fundamentals/web-components/shadowdom#reset */
+  all: initial;
+}
+
+.reset-all,
+.reset-all * {
+  box-sizing: border-box;
+}

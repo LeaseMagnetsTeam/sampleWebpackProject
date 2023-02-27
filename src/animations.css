@@ -1,0 +1,191 @@
+/* Scoping with CSS modules and PostCSS is weird. Basically, we use :global
+   here and in classes where the animations are used so that the transformed
+   animation name is the same between both files. See this article (step #3)
+   for more: https://gravitydept.com/blog/keyframe-animations-in-css-modules */
+
+/* Prettier doesn't know PostCSS :( */
+/* prettier-ignore */
+@keyframes :global(fadeInUp) {
+  from {
+    /* Using 150% instead of 100% so that the element is completely offscreen before disappearing */
+    transform: translateY(150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes :global(fadeInUpPartial) {
+  from {
+    /* Using 150% instead of 100% so that the element is completely offscreen before disappearing */
+    transform: translateY(60%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(fadeInDown) {
+  from {
+    transform: translateY(-150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Complement to fadeInDown, we need separate animations because only changing the
+   direction animation doesn't correctly play backwards without re-creating the element */
+/* prettier-ignore */
+@keyframes :global(fadeOutDown) {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    transform: translateY(150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(fadeOutUp) {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    transform: translateY(-150%);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.fade-in-up :global {
+  animation-name: fadeInUp;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+.fade-in-up-partial :global {
+  animation-name: fadeInUpPartial;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.fade-in-down :global {
+  animation-name: fadeInDown;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.fade-out-up :global {
+  animation-name: fadeOutUp;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.fade-out-down :global {
+  animation-name: fadeOutDown;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+/* prettier-ignore */
+@keyframes :global(slideInFromLeft) {
+  0% {
+    opacity: 0;
+    transform: translateX(-100vw);
+  }
+  50% {
+    opacity: .1;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Complement to slideInFromLeft */
+/* prettier-ignore */
+@keyframes :global(slideOutToLeft) {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateX(-100vw);
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(slideInFromRight) {
+  0% {
+    opacity: 0;
+    transform: translateX(100vw);
+  }
+  50% {
+    opacity: .1;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(slideOutToRight) {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateX(100vw);
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(scaleUp) {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* prettier-ignore */
+@keyframes :global(spin) {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

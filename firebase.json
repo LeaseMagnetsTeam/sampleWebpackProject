@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "dist",
+    "target": "videomagnet",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

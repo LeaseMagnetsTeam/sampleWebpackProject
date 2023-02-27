@@ -1,0 +1,2 @@
+/* CSS that must go in the page <head> rather than the shadow DOM */
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;500;700;900&display=swap');

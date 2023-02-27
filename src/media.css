@@ -1,0 +1,8 @@
+/* Using @values for @media breakpoints while we still have PostCSS + CSS modules,
+   can't do anything like this with CSS variables */
+@value maxTabletWidth: 992px;
+@value phone: (max-width: 992px);
+/* or ((max-width: 992px) and (min-aspect-ratio: 3/2));  */
+@value mobile: only screen and (max-width: maxTabletWidth);
+
+/* @value landscapeLayout: only screen and (max-width: maxTabletWidth) and (min-aspect-ratio: 3/2); */

@@ -1,0 +1,56 @@
+# Runs the CI. You can easily disable the style check on main/master using
+# [skip lint] (including the brackets) in your commit message/body.
+# Note: This feature is disabled on PRs as the purpose of this skip is for
+# quick deployment.
+
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.4.0'
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Style
+        # Runs style checker only on PRs
+        if: |
+          github.event_name == 'pull_request' ||
+          (
+          github.ref == 'refs/heads/master' &&
+          !contains(github.event.commits[0].message, '[skip lint]') &&
+          !contains(github.event.commits[0].message, '[skip style]')
+          )
+        run: npm run style
+      - name: Add REACT_APP_HOST
+        run: |
+          echo 'REACT_APP_HOST="https://api.leasemagnets.com"' > .env
+      - name: Set production build environment
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo 'FIREBASE_CHANNEL_ID=live' >> "$GITHUB_ENV"
+      - name: Set non-production build environment
+        if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+        run: |
+          echo 'FIREBASE_CHANNEL_ID=' >> "$GITHUB_ENV"
+      - name: Build Project
+        run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEASEMAGNETS___DUMMY_DB }}'
+          channelId: ${{ env.FIREBASE_CHANNEL_ID }}
+          projectId: leasemagnets---dummy-db

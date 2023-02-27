@@ -1,0 +1,9 @@
+steps:
+- name: "node:16.3.0"
+  entrypoint: "npm"
+  args: ['install']
+- name: "node:16.3.0"
+  entrypoint: "npm"
+  args: ['run', 'build']
+- name: "gcr.io/cloud-builders/gsutil"
+  args: ['cp', 'dist/leasemagnets.js', 'gs://leasemagnets-cloud-storage/widget/leasemagnets.js']

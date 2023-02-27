@@ -1,0 +1,638 @@
+@value phone,
+mobile,
+landscapeLayout from "./media.css";
+
+.videomagnet {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin: 10px;
+  font-family: var(--main-font);
+  font-weight: 500;
+  color: var(--text-color);
+  line-height: 20px;
+  overflow: hidden;
+  border-radius: 13px;
+  -webkit-transform: translateZ(0);
+  background: black;
+  /* background: #ffffff00; */
+  box-shadow: 4px 4px 12px 0 var(--black-shadow);
+  display: grid;
+  /* Video spans entire grid, below controls/navigation overlays */
+  /* For a horizontal layout, we'll create 2 columns instead of the 1 */
+  grid-template-columns: 100%;
+  /* Progress bar, video controls, title/location card, pause icon, nav links, footer */
+  grid-template-rows: auto auto auto 1fr 1fr auto;
+  justify-items: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+[data-open='true'][data-inline='true'] .videomagnet {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Don't qualify this with .embed-left in case we aren't using the embed layout, e.g. have parentId */
+
+.videomagnet-entering :global {
+  animation: fadeInUpPartial 0.75s;
+}
+
+.embed-center .videomagnet-entering :global,
+.embed-center-bottom .videomagnet-entering :global {
+  animation: fadeInUp 1s;
+}
+
+.embed-right .videomagnet-entering :global {
+  animation: fadeInUpPartial 0.75s;
+}
+
+.videomagnet-entered {
+  /* Filler for transition */
+}
+
+.videomagnet-exiting :global {
+  animation: slideOutToLeft 0s;
+}
+
+.embed-center .videomagnet-exiting :global,
+.embed-center-bottom .videomagnet-exiting :global {
+  animation: fadeOutDown 1s;
+}
+
+.embed-right .videomagnet-exiting :global {
+  animation: slideOutToRight 0s;
+}
+
+.videomagnet-exited {
+  display: none;
+}
+
+.videomagnet:fullscreen {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  border-radius: 0px;
+}
+
+.videomagnet > video {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Video fades out using CSS transition, fade back in using CSS animation
+   Super hacky, but otherwise it looks terrible in Safari (Chrome is fine, of course) */
+
+.video-entering :global {
+  animation-name: fadeOut;
+  animation-fill-mode: both;
+  opacity: 1;
+}
+
+.video-entered :global {
+  opacity: 1;
+  transition-property: opacity;
+}
+
+.video-exiting :global {
+  opacity: 0;
+  transition-property: opacity;
+}
+
+.video-exited :global {
+  opacity: 0;
+  transition-property: opacity;
+}
+
+.videomagnet > * {
+  z-index: 2;
+}
+
+/* Loader */
+@keyframes pulse_animation {
+  0% {
+    box-shadow: 0 0 0 0 var(--primary-color);
+    opacity: 0.5;
+  }
+
+  100% {
+    box-shadow: 0 0 0 35px var(--primary-color);
+    opacity: 0.8;
+  }
+}
+
+.pulse-wrapper {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pulse-wrapper .pulse {
+  margin: auto;
+}
+
+.pulse-wrapper .pulse span {
+  position: absolute;
+  margin-top: -25px;
+  /* = height / 2 */
+  margin-left: -25px;
+  /* = width / 2 */
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse_animation 1.3s infinite;
+}
+
+.pulse-wrapper .pulse span:nth-child(2) {
+  animation-delay: 0.3s;
+  /* Start the second wave with some delay */
+}
+
+.videomagnet .loader :global {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: 15vmin;
+  height: 15vmin;
+  z-index: 1;
+  border-radius: 50%;
+
+  mask: conic-gradient(
+    from 45deg,
+    transparent 0 var(--tail),
+    #000 0 var(--nose),
+    transparent 0 var(--nose)
+  );
+  border-style: solid;
+  border-width: 3vmin;
+  border-top-color: var(--color-one);
+  border-right-color: var(--color-two);
+  border-bottom-color: var(--color-three);
+  border-left-color: var(--color-four);
+  animation: load 2.5s both infinite ease-in-out, spin 3.25s infinite linear;
+}
+
+@property --nose {
+  syntax: '<percentage>';
+  initial-value: 0%;
+  inherits: false;
+}
+
+@property --tail {
+  syntax: '<percentage>';
+  initial-value: 0%;
+  inherits: false;
+}
+
+/* .loader {
+  height: calc(var(--size) * 1vmin);
+  width: calc(var(--size) * 1vmin);
+  border-radius: 50%;
+  mask: conic-gradient(from 45deg,
+      transparent 0 var(--tail),
+      #000 0 var(--nose),
+      transparent 0 var(--nose));
+  border-style: solid;
+  border-width: 5vmin;
+  border-top-color: var(--color-one);
+  border-right-color: var(--color-two);
+  border-bottom-color: var(--color-three);
+  border-left-color: var(--color-four);
+  animation: load 2.5s both infinite ease-in-out, spin 3.25s infinite linear;
+} */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load {
+  0% {
+    --tail: 0%;
+    --nose: 0%;
+  }
+
+  40%,
+  60% {
+    --nose: 100%;
+    --tail: 0%;
+  }
+
+  100% {
+    --nose: 100%;
+    --tail: 100%;
+  }
+}
+
+.videomagnet > .video-controls {
+  z-index: 3;
+}
+
+.videomagnet > video::-webkit-media-controls-start-playback-button {
+  display: none;
+}
+
+.videomagnet .title-container {
+  grid-column: 1;
+  grid-row: 3;
+  width: 100%;
+}
+
+.location-card {
+  width: fit-content;
+  margin: auto;
+  padding: 14px;
+  border: 0;
+  text-align: center;
+  background: var(--button-background-light);
+  border-radius: 10px;
+  font-size: var(--xlarge-font-size);
+  z-index: 5;
+}
+
+.location-card img {
+  width: 15px;
+  margin: 5px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Container for pause icon */
+
+.video-center-icons {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.videomagnet .pause-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.videomagnet .pause-icon svg :global {
+  opacity: 0.8;
+  transition: transform 300ms, opacity 300ms;
+  /* Transition on hover */
+  animation: scaleUp 100ms;
+  /* Animation on render */
+  cursor: pointer;
+}
+
+.videomagnet .pause-icon svg:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.videomagnet .pause-icon p {
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--button-background-light);
+  color: var(--primary-color);
+}
+
+/* pause Text Design */
+
+.videomagnet:hover .pause-text-blk {
+  background-color: var(--primary-color);
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.pause-text-blk {
+  display: flex;
+  flex-direction: 'row';
+  align-items: 'center';
+  background-color: black;
+  margin-top: 35px;
+  padding: 16px;
+  border-radius: 6px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 0px 6px;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.pause-text-blk:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.03);
+}
+
+.pause-text-blk svg {
+  margin-right: 14px;
+  opacity: 1 !important;
+}
+
+.pause-text-blk svg:hover {
+  transform: scale(1);
+}
+
+.pause-text-blk .pause-text {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Unmute Text Design */
+
+.videomagnet:hover .unmute-text-blk {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.unmute-text-blk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  margin-top: 35px;
+  transition: all 0.3s linear;
+  cursor: pointer;
+}
+
+.unmute-text-blk:hover {
+  transform: scale(1.02);
+}
+
+.unmute-text-blk svg {
+  height: 40px;
+  width: 40px;
+  margin-bottom: 10px;
+  opacity: 1 !important;
+}
+
+.unmute-text-blk svg:hover {
+  transform: scale(1);
+}
+
+.unmute-text-blk .pause-text {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-shadow: 1px 1px 1px rgb(0 0 0 / 35%);
+}
+
+.videomagnet-footer {
+  grid-column: 1 / -1;
+  grid-row: 6;
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.black-footer {
+  background: black;
+  /* Additional padding creates a white line on Chrome (iFrame and footer aren't flush :/ ) */
+  padding: 1px;
+}
+
+.branding-logo img {
+  display: block;
+  width: 50%;
+  padding: 0 5px;
+}
+
+.branding-logo,
+.branding-logo img {
+  margin: auto;
+  max-width: 50%;
+}
+
+.videomagnet .video-shade {
+  width: 100%;
+  height: 100%;
+  grid-row: 1 / -1;
+  grid-column: 1 / -1;
+  z-index: 2;
+  cursor: pointer;
+  /* Can't animate gradients, and animating the background-position doesn't seem to work,
+     so instead we just move the shade up and down (then we can use `transition` too) */
+  --gradient-start: 80%;
+  /* background: linear-gradient( 180deg, transparent 0%, rgba(0, 0, 0, 0.85) 35%, black 100%); */
+  position: relative;
+  top: var(--gradient-start);
+  transition: top 0.5s;
+  pointer-events: none;
+}
+
+.videomagnet .navigation-links-open ~ .video-shade {
+  --gradient-start: 60%;
+}
+
+.videomagnet .navigation-links-collapsed ~ .video-shade {
+  --gradient-start: 70%;
+}
+
+/* Split video and nav links into two columns on smaller, wider screens */
+
+@media (landscapelayout) {
+  .videomagnet {
+    grid-template-columns: 50% 50%;
+    /* Add second column */
+  }
+
+  /* If the video is the 1st of 5 elements, then we have video, video-shade, video-controls,
+     form, and videomagnet-footer, so we should make the video span both columns.
+     Yes, this is super hacky!! */
+  .videomagnet > video:first-child:nth-last-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  .video-center-icons {
+    grid-row: 4 / 6;
+  }
+
+  /* Specificity hack to beat the more specific ~ rule above */
+  .videomagnet .video-shade.video-shade,
+  .videomagnet:fullscreen .video-shade.video-shade {
+    --gradient-start: 75%;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.container-xscroll {
+  /* margin-top: -50px; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 40;
+  /* justify-content: center; */
+}
+
+.scroll-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  margin: 0 20px;
+}
+
+.scroll-btn {
+  outline: none;
+  border: none;
+  background: none;
+  height: 38px;
+  width: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s linear;
+  z-index: 99999;
+}
+
+.scroll-btn:hover {
+  background: var(--primary-color);
+}
+
+.prev-btn {
+  left: 8px;
+}
+
+.next-btn {
+  right: 8px;
+}
+
+.card {
+  flex-shrink: 0;
+  width: 250px;
+  height: 150px;
+  border-radius: 10px;
+  margin-right: 10px;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(
+    0deg,
+    rgba(52, 148, 237, 0.71),
+    rgba(52, 148, 237, 0.71)
+  );
+}
+
+.card:last-child {
+  margin-right: 0px;
+}
+
+.card .card-content {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card .play-btn {
+  outline: none;
+  background: none;
+  border: none;
+  /* height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px; */
+  transition: all 0.3s linear 0s;
+  visibility: hidden;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 11px;
+  left: 12px;
+  z-index: 9;
+}
+
+.card .play-btn svg {
+  height: 32px;
+  color: #fff;
+}
+
+.card .play-btn:hover {
+  transform: scale(1.06);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card:hover .card-content {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.card:hover .play-btn {
+  opacity: 0.9;
+  visibility: visible;
+}
+
+.card .card-ftr {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px 20px;
+}
+
+.card .card-ftr .name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.card .card-content h3 {
+  margin: 0;
+  padding: 0;
+}
+
+@media mobile {
+  .card {
+    flex-shrink: 0;
+    width: 120px;
+    height: 150px;
+    border-radius: 10px;
+    margin-left: 10px;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    overflow: hidden;
+    background: linear-gradient(
+      0deg,
+      rgba(52, 148, 237, 0.71),
+      rgba(52, 148, 237, 0.71)
+    );
+  }
+
+  .videomagnet-entering {
+    animation: fadeInUpPartial 0;
+  }
+}

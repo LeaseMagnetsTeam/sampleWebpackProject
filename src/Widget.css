@@ -1,0 +1,82 @@
+@value phone from "./media.css";
+
+.embed-left,
+.embed-left .main-button,
+.embed-left .videomagnet {
+  left: 0;
+  bottom: 0;
+}
+
+/* This is not centered within the parent element (if applicable),
+   it's centered within the entire viewport */
+.embed-center,
+.embed-center .videomagnet,
+.embed-center-bottom,
+.embed-center-bottom .videomagnet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.embed-center,
+.embed-center .videomagnet {
+  top: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.embed-center .main-button,
+.embed-center-bottom .main-button {
+  left: 0;
+}
+
+/* .embed-right does also have to be set to right: 0 to put the
+   main reset-all div on the right side as well */
+.embed-right,
+.embed-right .main-button,
+.embed-right .videomagnet {
+  right: 0;
+  bottom: 0;
+}
+
+.videomagnet-container[data-open='true'] {
+  position: fixed;
+  /* 95vh does not work on mobile! Clipped by address bar */
+  height: 95%;
+  width: 50%;
+  z-index: 2147483638;
+  /* TODO: Remove from here and Button and VMBackground, should be in a parent class, but that parent needs to be positioned */
+}
+
+/* Fill parent element when inline. Should be able to do this with
+   all layouts (not just inline), but we run into issues animating and positioning everything. */
+.has-parent .videomagnet-container[data-open='true'][data-inline='true'] {
+  position: static;
+  height: 100%;
+  width: 100%;
+}
+
+/* Can't combine the fullscreen and data-inline rules,
+   Autoprefixer creates 3 separate rules (-webkit-fullscreen,
+   -ms-fullscreen, and regular fullscreen + data-inline) and
+   somehow prevents the data-inline rule from being selected
+   in Safari :( */
+.videomagnet-container[data-open='true']:fullscreen {
+  height: 100%;
+  width: 100%;
+}
+
+.videomagnet-container[data-open='true'][data-inline='true'] {
+  height: 100%;
+  width: 100%;
+}
+
+@media phone {
+  /* TODO: If the parent element is offset >5% from the right side, the open
+     VideoMagnet will overflow the page */
+  .videomagnet-container[data-open='true'] {
+    width: 95%;
+  }
+}

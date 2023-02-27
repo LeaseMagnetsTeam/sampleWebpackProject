@@ -1,0 +1,233 @@
+@value mobile from "./media.css";
+
+.transition-all {
+  transition: all 225ms ease;
+}
+
+.icon-scale-transform {
+  cursor: pointer;
+  justify-content: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.icon-scale-transform[data-selected='true'],
+.icon-scale-transform:hover {
+  background: var(--button-background-dark);
+}
+
+.main-action-button {
+  background: var(--button-background);
+  cursor: pointer;
+}
+
+.hover-outline {
+  border: none;
+  outline: none;
+}
+
+.hover-outline[data-selected='true'],
+.hover-outline:hover {
+  box-shadow: var(--primary-color) 0px 0px 0px 2px;
+}
+
+.without-scrollbar {
+  overflow-y: hidden !important;
+}
+
+.with-scrollbar {
+  scrollbar-color: var(--primary-color) var(--button-background);
+  /* Thumb, track */
+}
+
+.with-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.with-scrollbar::-webkit-scrollbar-track {
+  background: var(--button-background);
+  border-radius: 5px;
+}
+
+.with-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--button-background);
+  border: var(--primary-color) 2px solid;
+  border-radius: 5px;
+}
+
+.with-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+.hover_up {
+  transition: 0.3s linear all;
+  position: relative;
+  animation-name: hoverup;
+  animation-duration: 2s;
+  animation-fill-mode: backwards;
+}
+
+.hover_up2 {
+  transition: 0.3s linear all;
+  position: relative;
+  animation-name: hoverup2;
+  animation-duration: 2s;
+  animation-fill-mode: backwards;
+}
+
+.animate_right {
+  position: relative;
+  animation-name: animateRight;
+  animation-duration: 2s;
+  transition: 0.3s linear all;
+  animation-iteration-count: infinite;
+}
+
+@keyframes hoverup {
+  0% {
+    margin-top: 30px;
+    opacity: 0;
+  }
+
+  100% {
+    margin-top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes hoverup2 {
+  0% {
+    margin-top: 30px;
+    opacity: 0;
+  }
+
+  100% {
+    margin-top: 0;
+    opacity: 1;
+  }
+}
+
+.successImage {
+  width: 200px;
+  object-fit: cover;
+}
+
+@keyframes animateRight {
+  0% {
+    left: 0;
+    opacity: 0.5;
+  }
+
+  50% {
+    left: 10px;
+    opacity: 1;
+  }
+
+  100% {
+    left: 0;
+    opacity: 0.5;
+  }
+}
+
+@media mobile {
+  .with-scrollbar::-webkit-scrollbar {
+    width: 15px;
+  }
+}
+
+.lds-ring2 {
+  display: inline-block;
+  position: relative;
+  width: 30px;
+  height: 23px;
+}
+
+.lds-ring2 div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-top: 10px;
+  margin: 4px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+
+.lds-ring2 div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring2 div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring2 div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring2 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: var(--primary-color);
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+
+  box-shadow: inset 0px 0px 0px var(--primary-color);
+  animation: fill 0.4s ease-in-out 0.4s forwards,
+    scale 0.3s ease-in-out 0.9s both;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px var(--primary-color);
+  }
+}
